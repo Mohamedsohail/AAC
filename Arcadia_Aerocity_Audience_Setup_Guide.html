@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcadia Aerocity — Step-by-Step Audience Setup Guide</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0f172a;color:#e2e8f0}
+.hero{background:linear-gradient(135deg,#1e3a5f,#0f172a);padding:28px;text-align:center;border-bottom:3px solid #2563eb}
+.hero h1{font-size:24px;color:#fff}.hero h1 span{color:#60a5fa}
+.hero .sub{color:#94a3b8;font-size:13px;margin-top:6px}
+
+.nav{position:sticky;top:0;z-index:100;background:#0f172a;border-bottom:2px solid #2563eb;display:flex;overflow-x:auto}
+.nav a{padding:13px 20px;color:#94a3b8;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s}
+.nav a:hover,.nav a.active{color:#60a5fa;border-bottom-color:#3b82f6;background:#1e293b}
+
+.section{display:none;padding:20px}.section.active{display:block}
+
+.stitle{padding:18px 0 10px;font-size:16px;font-weight:600;color:#60a5fa;display:flex;align-items:center;gap:8px}
+.stitle::before{content:'';width:4px;height:20px;background:#3b82f6;border-radius:2px}
+
+.card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #334155;margin-bottom:15px}
+.card h3{font-size:13px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:15px}
+
+.step-box{background:#172033;border-radius:10px;padding:16px 20px;margin-bottom:12px;border-left:4px solid #3b82f6;position:relative}
+.step-box.warn{border-left-color:#f59e0b}
+.step-box.danger{border-left-color:#ef4444}
+.step-box.success{border-left-color:#22c55e}
+.step-num{position:absolute;top:-8px;left:-8px;background:#2563eb;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.step-box h4{font-size:13px;color:#fff;margin-bottom:6px}
+.step-box p{font-size:12px;color:#94a3b8;line-height:1.6}
+.step-box .field{display:flex;margin-top:8px;padding:6px 0;border-bottom:1px solid #1e293b}
+.step-box .field:last-child{border:none}
+.step-box .field .flbl{color:#64748b;min-width:160px;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.step-box .field .fval{color:#e2e8f0;font-size:12px;font-weight:500}
+.step-box .field .fval.blue{color:#60a5fa}
+.step-box .field .fval.green{color:#4ade80}
+.step-box .field .fval.yellow{color:#fbbf24}
+.step-box .field .fval.red{color:#f87171}
+
+.interest-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.interest-tag{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 12px;font-size:11px}
+.interest-tag .itop{color:#60a5fa;font-weight:600;margin-bottom:2px}
+.interest-tag .isub{color:#64748b;font-size:10px}
+
+.warning-box{background:#78350f;border:1px solid #f59e0b;border-radius:8px;padding:14px;margin:12px 0;font-size:12px;color:#fef3c7}
+.tip-box{background:#064e3b;border:1px solid #22c55e;border-radius:8px;padding:14px;margin:12px 0;font-size:12px;color:#d1fae5}
+.danger-box{background:#7f1d1d;border:1px solid #ef4444;border-radius:8px;padding:14px;margin:12px 0;font-size:12px;color:#fee2e2}
+
+.vs-box{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:12px 0}
+.vs-box .side{background:#172033;border-radius:8px;padding:14px;text-align:center}
+.vs-box .side h5{font-size:12px;margin-bottom:4px}
+.vs-box .side p{font-size:11px;color:#94a3b8}
+.vs-box .mid{color:#f59e0b;font-weight:700;font-size:14px}
+
+.checklist{margin-top:10px}
+.checklist .chk{display:flex;gap:8px;padding:6px 0;font-size:12px;border-bottom:1px solid #1e293b}
+.checklist .chk:last-child{border:none}
+.chk-icon{color:#22c55e;flex-shrink:0}
+.chk-x{color:#ef4444;flex-shrink:0}
+
+.px{padding:0 20px 15px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:900px){.g2,.interest-grid,.vs-box{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>AUDIENCE <span>SETUP GUIDE</span> — Step by Step</h1>
+  <div class="sub">Arcadia Aerocity Phase 2 | Every field, every click, every setting in Meta Ads Manager</div>
+</div>
+
+<div class="nav" id="nav">
+  <a href="#" onclick="showTab('pre')" class="active" id="nav-pre">⚙️ Pre-Setup</a>
+  <a href="#" onclick="showTab('ad1')" id="nav-ad1">1️⃣ Chennai Budget</a>
+  <a href="#" onclick="showTab('ad2')" id="nav-ad2">2️⃣ Kanchipuram</a>
+  <a href="#" onclick="showTab('ad3')" id="nav-ad3">3️⃣ Investors</a>
+  <a href="#" onclick="showTab('ad4')" id="nav-ad4">4️⃣ Offer Seekers</a>
+  <a href="#" onclick="showTab('ad5')" id="nav-ad5">5️⃣ Lookalike</a>
+  <a href="#" onclick="showTab('mistakes')" id="nav-mistakes">🚫 Common Mistakes</a>
+</div>
+
+<!-- ========== PRE-SETUP ========== -->
+<div class="section active" id="pre">
+<div class="px">
+
+  <div class="stitle">Before You Create Any Adset — Do These First</div>
+
+  <div class="step-box success">
+    <div class="step-num">1</div>
+    <h4>Create Custom Audiences (You'll need these for Adset 5)</h4>
+    <p>Go to: <strong style="color:#60a5fa">Meta Ads Manager → Audiences → Create Audience → Custom Audience</strong></p>
+    <div class="field"><span class="flbl">Audience 1</span><span class="fval blue">Website Traffic → People who visited arcadiaaerocity.propshell.com → Last 180 days</span></div>
+    <div class="field"><span class="flbl">Audience 2</span><span class="fval blue">Lead Form → People who opened but didn't submit → Last 90 days</span></div>
+    <div class="field"><span class="flbl">Audience 3</span><span class="fval blue">Video → People who watched 50%+ of any AAC video → Last 90 days</span></div>
+    <div class="field"><span class="flbl">Audience 4</span><span class="fval green">Customer List → Upload your best leads (Hot + Warm from CRM) as CSV</span></div>
+    <div class="tip-box">💡 <strong>PRO TIP:</strong> Upload at least 100 customer emails/phones for the Customer List. Meta needs minimum 100 matches to create a Lookalike. Your 36 current leads may not be enough — include leads from past AAC campaigns too.</div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">2</div>
+    <h4>Create Lookalike Audiences (For Adset 5)</h4>
+    <p>Go to: <strong style="color:#60a5fa">Audiences → Create Audience → Lookalike Audience</strong></p>
+    <div class="field"><span class="flbl">Source</span><span class="fval blue">Customer List (your best leads uploaded above)</span></div>
+    <div class="field"><span class="flbl">Location</span><span class="fval">Tamil Nadu, India</span></div>
+    <div class="field"><span class="flbl">Size</span><span class="fval green">1% (most similar — highest quality)</span></div>
+    <div class="field"><span class="flbl">Also Create</span><span class="fval yellow">2% (for later testing if 1% audience exhausts)</span></div>
+    <div class="warning-box">⏳ <strong>NOTE:</strong> Lookalike audiences take 6-24 hours to populate. Create these TODAY so they're ready by April 1.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">3</div>
+    <h4>Install Meta Pixel on Landing Page</h4>
+    <p>Go to: <strong style="color:#60a5fa">Events Manager → Pixels → arcadiaaerocity.propshell.com</strong></p>
+    <div class="field"><span class="flbl">Verify Events</span><span class="fval">PageView, Lead, ViewContent should be firing</span></div>
+    <div class="field"><span class="flbl">Test Tool</span><span class="fval blue">Events Manager → Test Events → Open landing page → Confirm events appear</span></div>
+    <div class="field"><span class="flbl">Aggregated Events</span><span class="fval">Configure: Lead (Priority 1), ViewContent (Priority 2)</span></div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">4</div>
+    <h4>Campaign Level Setup (Before Adsets)</h4>
+    <p>Go to: <strong style="color:#60a5fa">Ads Manager → + Create → Campaign</strong></p>
+    <div class="field"><span class="flbl">Campaign Objective</span><span class="fval blue">Leads</span></div>
+    <div class="field"><span class="flbl">Campaign Name</span><span class="fval">Arcadia Aerocity P2 — Lead Gen — Adv+ — Apr 2026</span></div>
+    <div class="field"><span class="flbl">Special Ad Category</span><span class="fval green">NONE (Real Estate not restricted in India)</span></div>
+    <div class="field"><span class="flbl">Campaign Budget</span><span class="fval blue">Turn ON Advantage Campaign Budget (CBO)</span></div>
+    <div class="field"><span class="flbl">Daily Budget</span><span class="fval green">₹6,000</span></div>
+    <div class="field"><span class="flbl">Bid Strategy</span><span class="fval yellow">Cost Cap → Enter ₹350</span></div>
+    <div class="danger-box">🚫 <strong>DO NOT</strong> select "Lowest Cost" — it will spend your full budget with no CPL control. Always use Cost Cap for lead gen.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ========== ADSET 1: CHENNAI LOW BUDGET ========== -->
+<div class="section" id="ad1">
+<div class="px">
+
+  <div class="stitle">Adset 1: Chennai Low Budget Buyers — Full Setup</div>
+  <div style="background:#0d2818;border:1px solid #22c55e;border-radius:10px;padding:14px;margin-bottom:15px;font-size:12px;color:#d1fae5">
+    <strong>VIDEO SCRIPT:</strong> Script 01 (Low Budget & Chennai) | <strong>GOAL:</strong> Reach budget-conscious first-time buyers in Chennai metro | <strong>BUDGET:</strong> 25% of total
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">1</div>
+    <h4>Adset Name & Conversion</h4>
+    <div class="field"><span class="flbl">Adset Name</span><span class="fval">Adset 1 — Chennai Low Budget — Script 01</span></div>
+    <div class="field"><span class="flbl">Conversion Location</span><span class="fval blue">Instant Forms</span></div>
+    <div class="field"><span class="flbl">Performance Goal</span><span class="fval">Maximize number of leads</span></div>
+    <div class="field"><span class="flbl">Facebook Page</span><span class="fval">Select your AAC / Propshell page</span></div>
+    <div class="field"><span class="flbl">Instagram Account</span><span class="fval">Connect your IG account (if available)</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">2</div>
+    <h4>Audience Controls — Turn OFF Advantage+ Audience</h4>
+    <p>This is the most important step. You need manual control for Week 1-2.</p>
+    <div class="field"><span class="flbl">Advantage+ Audience</span><span class="fval red">SWITCH OFF ← Click "Switch to original audience options"</span></div>
+    <div class="warning-box">⚠️ <strong>WHY OFF?</strong> Advantage+ Audience lets Meta target anyone — too broad for real estate. We need precise control over location, age, and interests. You can test Advantage+ later in Phase 2 once you have conversion data.</div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">3</div>
+    <h4>Location Targeting — CRITICAL</h4>
+    <div class="field"><span class="flbl">Location Type</span><span class="fval red">Select: "People living in this location" ← NOT "Recently in"</span></div>
+    <div class="field"><span class="flbl">Location 1</span><span class="fval blue">Chennai, Tamil Nadu → Drop pin on Chennai center → Set radius: 30 km</span></div>
+    <div class="field"><span class="flbl">Location 2</span><span class="fval blue">Tambaram → +15 km radius (covers Sriperumbudur corridor)</span></div>
+    <div class="field"><span class="flbl">Location 3</span><span class="fval blue">Chengalpattu → +15 km radius</span></div>
+    <div class="danger-box">🚫 <strong>CRITICAL:</strong> Always select <strong>"People LIVING in this location"</strong> — NOT "Everyone in this location" or "People recently in this location." Tourists and travelers will waste your budget with junk leads.</div>
+    <div class="tip-box">💡 <strong>EXCLUDE:</strong> Do NOT exclude any locations for Adset 1. Keep it broad within Chennai metro to maximize reach for budget-conscious buyers.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">4</div>
+    <h4>Age & Gender</h4>
+    <div class="field"><span class="flbl">Age Range</span><span class="fval blue">25 — 45</span></div>
+    <div class="field"><span class="flbl">Gender</span><span class="fval green">All Genders</span></div>
+    <div class="tip-box">💡 <strong>WHY 25-45?</strong> Script 01 targets first-time budget buyers. Under 25 rarely have ₹13L budget. Over 45 typically look for higher-value properties. This is the sweet spot for affordable plot buyers.</div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">5</div>
+    <h4>Detailed Targeting — Interests (THE KEY STEP)</h4>
+    <p>Click <strong>"Browse"</strong> → Search and add these interests one by one:</p>
+
+    <div class="interest-grid">
+      <div class="interest-tag"><div class="itop">Real estate</div><div class="isub">Category: Interests → Business & Industry</div></div>
+      <div class="interest-tag"><div class="itop">Property</div><div class="isub">Category: Interests → Business & Industry</div></div>
+      <div class="interest-tag"><div class="itop">Residential area</div><div class="isub">Category: Interests → Real Estate</div></div>
+      <div class="interest-tag"><div class="itop">Real estate investing</div><div class="isub">Category: Interests → Business & Industry</div></div>
+      <div class="interest-tag"><div class="itop">Home loan</div><div class="isub">Category: Interests → Finance → Loan</div></div>
+      <div class="interest-tag"><div class="itop">Affordable housing</div><div class="isub">Category: Interests → Real Estate</div></div>
+      <div class="interest-tag"><div class="itop">Property investment</div><div class="isub">Category: Interests → Business</div></div>
+      <div class="interest-tag"><div class="itop">Plots for sale</div><div class="isub">Search: "Plots" → select related options</div></div>
+      <div class="interest-tag"><div class="itop">Home ownership</div><div class="isub">Category: Interests → Home & Garden</div></div>
+      <div class="interest-tag"><div class="itop">First-time buyer</div><div class="isub">Category: Interests → Real Estate</div></div>
+    </div>
+
+    <div class="warning-box">⚠️ <strong>IMPORTANT — ALL interests are OR logic, not AND.</strong> This means Meta will show ads to people who match ANY of these interests. That's correct — it creates a broader pool. Do NOT click "Narrow Audience" for this adset.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">6</div>
+    <h4>Detailed Targeting — Behaviors (Optional Layer)</h4>
+    <div class="interest-grid">
+      <div class="interest-tag"><div class="itop">Engaged Shoppers</div><div class="isub">Behaviors → Purchase behavior</div></div>
+      <div class="interest-tag"><div class="itop">Small business owners</div><div class="isub">Behaviors → Digital activities</div></div>
+    </div>
+    <div class="tip-box">💡 These behaviors help filter out low-intent users. People who are "Engaged Shoppers" are more likely to fill forms and make purchase decisions.</div>
+  </div>
+
+  <div class="step-box warn">
+    <div class="step-num">7</div>
+    <h4>Exclusions — Who NOT to show ads to</h4>
+    <div class="field"><span class="flbl">Exclude Custom Audience</span><span class="fval red">Existing Leads (people who already submitted your lead form)</span></div>
+    <div class="field"><span class="flbl">Exclude Custom Audience</span><span class="fval red">Existing Customers (if you have a list)</span></div>
+    <div class="tip-box">💡 <strong>WHY EXCLUDE?</strong> Without exclusions, Meta will show ads to people who already gave you their number. That's wasted budget — they're already in your CRM.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">8</div>
+    <h4>Placements</h4>
+    <div class="field"><span class="flbl">Placement Type</span><span class="fval blue">Advantage+ Placements (Recommended) ← KEEP THIS ON</span></div>
+    <div class="tip-box">💡 <strong>WHY Advantage+ Placements?</strong> Unlike audience (which we turned off), letting Meta choose PLACEMENTS is smart — it finds the cheapest leads across FB Feed, IG Feed, Stories, Reels, Audience Network automatically. Don't restrict placements.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">9</div>
+    <h4>Budget & Schedule</h4>
+    <div class="field"><span class="flbl">Budget</span><span class="fval green">Controlled by CBO at campaign level (₹6,000/day total)</span></div>
+    <div class="field"><span class="flbl">Adset Spend Limit (optional)</span><span class="fval yellow">Min: ₹800/day — Max: ₹2,200/day</span></div>
+    <div class="field"><span class="flbl">Start Date</span><span class="fval blue">April 1, 2026 — 12:00 AM</span></div>
+    <div class="field"><span class="flbl">End Date</span><span class="fval green">No end date (continuous)</span></div>
+    <div class="field"><span class="flbl">Ad Scheduling</span><span class="fval">Run ads all the time (optimize later based on data)</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">10</div>
+    <h4>Expected Audience Size — Check Before Saving</h4>
+    <div class="field"><span class="flbl">Estimated Audience Size</span><span class="fval green">Should show: 2,000,000 — 6,000,000 (2M-6M)</span></div>
+    <div class="field"><span class="flbl">If Too Small (< 500K)</span><span class="fval red">Remove some interests or expand age range to 23-48</span></div>
+    <div class="field"><span class="flbl">If Too Large (> 10M)</span><span class="fval yellow">Add 1-2 more interests using "Narrow Audience" (AND logic)</span></div>
+    <div class="danger-box">🎯 <strong>SWEET SPOT:</strong> 1M-5M audience size is ideal for ₹1,500/day budget. Too small = high frequency, ad fatigue. Too large = wasted impressions on unqualified people.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ========== ADSET 2: KANCHIPURAM SPIRITUAL ========== -->
+<div class="section" id="ad2">
+<div class="px">
+
+  <div class="stitle">Adset 2: Kanchipuram Spiritual + Local — Full Setup</div>
+  <div style="background:#1a1525;border:1px solid #8b5cf6;border-radius:10px;padding:14px;margin-bottom:15px;font-size:12px;color:#e9d5ff">
+    <strong>VIDEO SCRIPT:</strong> Script 02 (Kanchipuram Spiritual & Amenities) | <strong>GOAL:</strong> Reach locals + temple visitors emotionally connected to Kanchipuram | <strong>BUDGET:</strong> 20%
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">1</div>
+    <h4>Adset Name & Conversion</h4>
+    <div class="field"><span class="flbl">Adset Name</span><span class="fval">Adset 2 — Kanchipuram Spiritual — Script 02</span></div>
+    <div class="field"><span class="flbl">Conversion Location</span><span class="fval green">WhatsApp ← Higher quality for spiritual/local audience</span></div>
+    <div class="field"><span class="flbl">Performance Goal</span><span class="fval">Maximize number of conversations</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">2</div>
+    <h4>Audience Controls</h4>
+    <div class="field"><span class="flbl">Advantage+ Audience</span><span class="fval red">SWITCH OFF</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">3</div>
+    <h4>Location — Hyper-Local Targeting</h4>
+    <div class="field"><span class="flbl">Location Type</span><span class="fval red">"People LIVING in this location"</span></div>
+    <div class="field"><span class="flbl">Location 1</span><span class="fval blue">Kanchipuram, Tamil Nadu → Drop pin → 20 km radius</span></div>
+    <div class="field"><span class="flbl">Location 2</span><span class="fval blue">Sriperumbudur → Drop pin → 15 km radius</span></div>
+    <div class="field"><span class="flbl">Location 3</span><span class="fval blue">Chengalpattu → Drop pin → 15 km radius</span></div>
+    <div class="field"><span class="flbl">Location 4</span><span class="fval blue">Walajabad → Drop pin → 10 km radius</span></div>
+    <div class="tip-box">💡 <strong>WHY HYPER-LOCAL?</strong> Script 02 talks about Kanchi Kamachi temple and local landmarks. People living near Kanchipuram will have the strongest emotional connection to this video. They're also more likely to visit the site.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">4</div>
+    <h4>Age & Gender</h4>
+    <div class="field"><span class="flbl">Age Range</span><span class="fval blue">28 — 55</span></div>
+    <div class="field"><span class="flbl">Gender</span><span class="fval green">All Genders</span></div>
+    <div class="tip-box">💡 <strong>WHY 28-55?</strong> Older age range because spiritual/temple audience skews older. Also, local Kanchipuram buyers tend to be more established families looking for long-term residential plots.</div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">5</div>
+    <h4>Detailed Targeting — Interests</h4>
+    <p>Search and add each of these:</p>
+    <div class="interest-grid">
+      <div class="interest-tag"><div class="itop">Hindu temples</div><div class="isub">Interests → Additional interests</div></div>
+      <div class="interest-tag"><div class="itop">Temples in India</div><div class="isub">Search: "Temples in India"</div></div>
+      <div class="interest-tag"><div class="itop">Kanchipuram</div><div class="isub">Search: "Kanchipuram" → select city interest</div></div>
+      <div class="interest-tag"><div class="itop">Pilgrimage</div><div class="isub">Interests → Travel → Pilgrimage</div></div>
+      <div class="interest-tag"><div class="itop">Land for sale</div><div class="isub">Search: "Land" → related options</div></div>
+      <div class="interest-tag"><div class="itop">Villa</div><div class="isub">Interests → Real estate</div></div>
+      <div class="interest-tag"><div class="itop">Real estate</div><div class="isub">Interests → Business & Industry</div></div>
+      <div class="interest-tag"><div class="itop">Property</div><div class="isub">Interests → Business & Industry</div></div>
+    </div>
+
+    <div class="warning-box">⚠️ <strong>NARROW AUDIENCE OPTION:</strong> For this adset, you CAN use "Narrow Audience" (AND logic). Set it as: <br><br>
+    <strong>Must match:</strong> Hindu temples OR Kanchipuram OR Pilgrimage<br>
+    <strong>AND must also match:</strong> Real estate OR Property OR Land for sale OR Villa<br><br>
+    This ensures you only reach people interested in BOTH spiritual topics AND property — not random temple visitors.</div>
+  </div>
+
+  <div class="step-box warn">
+    <div class="step-num">6</div>
+    <h4>Exclusions</h4>
+    <div class="field"><span class="flbl">Exclude</span><span class="fval red">Existing Leads (submitted form previously)</span></div>
+    <div class="field"><span class="flbl">Exclude</span><span class="fval red">Adset 1 audiences (to prevent overlap) — Optional but recommended</span></div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">7</div>
+    <h4>Placements & Schedule</h4>
+    <div class="field"><span class="flbl">Placements</span><span class="fval blue">Advantage+ Placements (keep ON)</span></div>
+    <div class="field"><span class="flbl">Adset Spend Limit</span><span class="fval yellow">Min: ₹600/day — Max: ₹1,800/day</span></div>
+    <div class="field"><span class="flbl">Start Date</span><span class="fval blue">April 1, 2026</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">8</div>
+    <h4>Expected Audience Size</h4>
+    <div class="field"><span class="flbl">Target Size</span><span class="fval green">500,000 — 1,500,000 (500K-1.5M)</span></div>
+    <div class="field"><span class="flbl">If Too Small (< 200K)</span><span class="fval yellow">Remove "Narrow Audience" AND logic, keep all interests as OR</span></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ========== ADSET 3: INVESTORS & NRI ========== -->
+<div class="section" id="ad3">
+<div class="px">
+
+  <div class="stitle">Adset 3: Investors & NRI — Full Setup</div>
+  <div style="background:#172033;border:1px solid #3b82f6;border-radius:10px;padding:14px;margin-bottom:15px;font-size:12px;color:#bfdbfe">
+    <strong>VIDEO SCRIPT:</strong> Script 03 (Investment & 360° Tour) | <strong>GOAL:</strong> Reach high-income investors and NRIs | <strong>BUDGET:</strong> 20%
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">1</div>
+    <h4>Adset Name & Conversion</h4>
+    <div class="field"><span class="flbl">Adset Name</span><span class="fval">Adset 3 — Investors NRI — Script 03</span></div>
+    <div class="field"><span class="flbl">Conversion Location</span><span class="fval blue">Instant Forms</span></div>
+    <div class="field"><span class="flbl">Performance Goal</span><span class="fval">Maximize number of leads</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">2</div>
+    <h4>Audience Controls</h4>
+    <div class="field"><span class="flbl">Advantage+ Audience</span><span class="fval red">SWITCH OFF</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">3</div>
+    <h4>Location — Wider + NRI Friendly</h4>
+    <div class="field"><span class="flbl">Location Type</span><span class="fval red">"People LIVING in this location"</span></div>
+    <div class="field"><span class="flbl">Location 1</span><span class="fval blue">Chennai, Tamil Nadu → 40 km radius (wider than Adset 1)</span></div>
+    <div class="field"><span class="flbl">Location 2</span><span class="fval blue">Coimbatore → 20 km radius (second-largest TN city, high NRI population)</span></div>
+    <div class="field"><span class="flbl">Location 3</span><span class="fval blue">Madurai → 15 km radius (high property investment interest)</span></div>
+    <div class="field"><span class="flbl">Location 4 (Optional)</span><span class="fval yellow">Bengaluru → 25 km radius (many TN NRIs work here)</span></div>
+    <div class="tip-box">💡 <strong>NRI STRATEGY:</strong> Instead of targeting countries like UAE/Singapore (expensive), target Indian metro cities where NRIs visit frequently. Also, the "Frequent International Travelers" behavior below will catch NRIs living in India.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">4</div>
+    <h4>Age & Gender</h4>
+    <div class="field"><span class="flbl">Age Range</span><span class="fval blue">30 — 55</span></div>
+    <div class="field"><span class="flbl">Gender</span><span class="fval green">All Genders</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">5</div>
+    <h4>Detailed Targeting — Interests</h4>
+    <div class="interest-grid">
+      <div class="interest-tag"><div class="itop">Real estate investing</div><div class="isub">Interests → Business & Industry</div></div>
+      <div class="interest-tag"><div class="itop">Investment</div><div class="isub">Interests → Business & Industry → Finance</div></div>
+      <div class="interest-tag"><div class="itop">Mutual funds</div><div class="isub">Interests → Finance</div></div>
+      <div class="interest-tag"><div class="itop">Stock market</div><div class="isub">Interests → Finance → Investing</div></div>
+      <div class="interest-tag"><div class="itop">Property investment</div><div class="isub">Interests → Business</div></div>
+      <div class="interest-tag"><div class="itop">Commercial property</div><div class="isub">Interests → Real Estate</div></div>
+      <div class="interest-tag"><div class="itop">NRI</div><div class="isub">Search: "NRI" or "Non-resident Indian"</div></div>
+      <div class="interest-tag"><div class="itop">Wealth management</div><div class="isub">Interests → Finance</div></div>
+    </div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">6</div>
+    <h4>Detailed Targeting — Behaviors (IMPORTANT for this adset)</h4>
+    <div class="interest-grid">
+      <div class="interest-tag"><div class="itop">Frequent international travelers</div><div class="isub">Behaviors → Travel → Frequent travelers</div></div>
+      <div class="interest-tag"><div class="itop">Business travelers</div><div class="isub">Behaviors → Travel</div></div>
+      <div class="interest-tag"><div class="itop">Small business owners</div><div class="isub">Behaviors → Digital activities</div></div>
+      <div class="interest-tag"><div class="itop">Technology early adopters</div><div class="isub">Behaviors → Digital activities</div></div>
+    </div>
+
+    <div class="warning-box">⚠️ <strong>USE NARROW AUDIENCE (AND logic):</strong><br><br>
+    <strong>Must match:</strong> Real estate investing OR Investment OR Property investment OR NRI<br>
+    <strong>AND must also match:</strong> Frequent international travelers OR Business travelers OR Small business owners<br><br>
+    This ensures you reach WEALTHY people interested in property — not casual browsers.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">7</div>
+    <h4>Placements & Schedule</h4>
+    <div class="field"><span class="flbl">Placements</span><span class="fval blue">Advantage+ Placements</span></div>
+    <div class="field"><span class="flbl">Adset Spend Limit</span><span class="fval yellow">Min: ₹600/day — Max: ₹1,800/day</span></div>
+    <div class="field"><span class="flbl">Expected Audience</span><span class="fval green">300,000 — 1,000,000 (300K-1M)</span></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ========== ADSET 4: OFFER SEEKERS ========== -->
+<div class="section" id="ad4">
+<div class="px">
+
+  <div class="stitle">Adset 4: Offer / Deal Hunters — Full Setup</div>
+  <div style="background:#231a0d;border:1px solid #f59e0b;border-radius:10px;padding:14px;margin-bottom:15px;font-size:12px;color:#fef3c7">
+    <strong>VIDEO SCRIPT:</strong> Script 04 (Nethi Adi Offer — 100 sq.ft FREE) | <strong>GOAL:</strong> Maximum lead volume with urgency offer | <strong>BUDGET:</strong> 20%
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">1</div>
+    <h4>Adset Name & Conversion</h4>
+    <div class="field"><span class="flbl">Adset Name</span><span class="fval">Adset 4 — Offer Nethi Adi — Script 04</span></div>
+    <div class="field"><span class="flbl">Conversion Location</span><span class="fval blue">Instant Forms</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">2</div>
+    <h4>Audience — BROADEST targeting (Let the offer do the work)</h4>
+    <div class="field"><span class="flbl">Advantage+ Audience</span><span class="fval red">SWITCH OFF</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">3</div>
+    <h4>Location — Wide Net</h4>
+    <div class="field"><span class="flbl">Location Type</span><span class="fval red">"People LIVING in this location"</span></div>
+    <div class="field"><span class="flbl">Location 1</span><span class="fval blue">Chennai → 40 km radius (broadest of all adsets)</span></div>
+    <div class="field"><span class="flbl">Location 2</span><span class="fval blue">Kanchipuram → 25 km radius</span></div>
+    <div class="field"><span class="flbl">Location 3</span><span class="fval blue">Vellore → 15 km radius (nearby city, deal-seekers)</span></div>
+    <div class="tip-box">💡 <strong>WHY BROADEST?</strong> The "100 sq.ft FREE" offer is a strong hook that qualifies people by itself. Broader targeting = cheaper CPM = more people see the offer = more leads. The offer filters out uninterested people naturally.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">4</div>
+    <h4>Age & Gender</h4>
+    <div class="field"><span class="flbl">Age Range</span><span class="fval blue">25 — 50</span></div>
+    <div class="field"><span class="flbl">Gender</span><span class="fval green">All Genders</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">5</div>
+    <h4>Detailed Targeting — Interests (Deal-focused)</h4>
+    <div class="interest-grid">
+      <div class="interest-tag"><div class="itop">Real estate</div><div class="isub">Interests → Business & Industry</div></div>
+      <div class="interest-tag"><div class="itop">Property</div><div class="isub">Interests → Business & Industry</div></div>
+      <div class="interest-tag"><div class="itop">Online shopping</div><div class="isub">Interests → Shopping & Fashion</div></div>
+      <div class="interest-tag"><div class="itop">Coupon</div><div class="isub">Interests → Shopping → Coupons</div></div>
+      <div class="interest-tag"><div class="itop">Discount</div><div class="isub">Search: "Discount"</div></div>
+      <div class="interest-tag"><div class="itop">Home loan</div><div class="isub">Interests → Finance → Loan</div></div>
+      <div class="interest-tag"><div class="itop">Land for sale</div><div class="isub">Search: "Land"</div></div>
+      <div class="interest-tag"><div class="itop">Residential area</div><div class="isub">Interests → Real Estate</div></div>
+    </div>
+
+    <div class="tip-box">💡 <strong>NO "Narrow Audience" for this adset.</strong> Keep all interests as OR (broad). The "100 sq.ft FREE" offer is the qualifier — let Meta optimize delivery to people most likely to respond to offers.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">6</div>
+    <h4>Behaviors</h4>
+    <div class="interest-grid">
+      <div class="interest-tag"><div class="itop">Engaged Shoppers</div><div class="isub">Behaviors → Purchase behavior → Engaged Shoppers</div></div>
+    </div>
+    <div class="tip-box">💡 "Engaged Shoppers" is a Meta behavior that identifies people who click "Shop Now" buttons, add to cart, etc. These people respond well to offers and urgency messaging.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">7</div>
+    <h4>Placements & Schedule</h4>
+    <div class="field"><span class="flbl">Placements</span><span class="fval blue">Advantage+ Placements</span></div>
+    <div class="field"><span class="flbl">Adset Spend Limit</span><span class="fval yellow">Min: ₹600/day — Max: ₹1,800/day</span></div>
+    <div class="field"><span class="flbl">Expected Audience</span><span class="fval green">2,000,000 — 8,000,000 (2M-8M) — Largest pool</span></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ========== ADSET 5: LOOKALIKE ========== -->
+<div class="section" id="ad5">
+<div class="px">
+
+  <div class="stitle">Adset 5: Lookalike — Best Past Leads — Full Setup</div>
+  <div style="background:#0d2818;border:1px solid #22c55e;border-radius:10px;padding:14px;margin-bottom:15px;font-size:12px;color:#d1fae5">
+    <strong>VIDEO SCRIPT:</strong> Script 01 + 03 (Best performers) | <strong>GOAL:</strong> Find new people similar to your best existing leads | <strong>BUDGET:</strong> 15%
+  </div>
+
+  <div class="step-box warn">
+    <div class="step-num">⚡</div>
+    <h4>PRE-REQUISITE — Must Be Done BEFORE This Adset</h4>
+    <p>You must have already created the Lookalike Audience in Pre-Setup (Tab 1). If not, go back and create it now. It takes 6-24 hours to populate.</p>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">1</div>
+    <h4>Adset Name & Conversion</h4>
+    <div class="field"><span class="flbl">Adset Name</span><span class="fval">Adset 5 — Lookalike 1% — Script 01+03</span></div>
+    <div class="field"><span class="flbl">Conversion Location</span><span class="fval green">WhatsApp</span></div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">2</div>
+    <h4>Audience — USE the Lookalike</h4>
+    <div class="field"><span class="flbl">Advantage+ Audience</span><span class="fval red">SWITCH OFF</span></div>
+    <div class="field"><span class="flbl">Custom Audiences</span><span class="fval blue">Select: "Lookalike (1%) — AAC Best Leads"</span></div>
+    <div class="danger-box">🚫 <strong>DO NOT add any interests or behaviors to this adset!</strong> The Lookalike audience IS your targeting. Adding interests on top of a Lookalike shrinks it too much and prevents Meta from optimizing.</div>
+  </div>
+
+  <div class="step-box success">
+    <div class="step-num">3</div>
+    <h4>Location — Tamil Nadu Only</h4>
+    <div class="field"><span class="flbl">Location Type</span><span class="fval red">"People LIVING in this location"</span></div>
+    <div class="field"><span class="flbl">Location</span><span class="fval blue">Tamil Nadu, India (entire state)</span></div>
+    <div class="tip-box">💡 <strong>WHY entire Tamil Nadu?</strong> Lookalike already found people SIMILAR to your leads. Adding tight location restricts it too much. Let Meta find the best matches across the state.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">4</div>
+    <h4>Age & Gender</h4>
+    <div class="field"><span class="flbl">Age Range</span><span class="fval blue">25 — 55 (widest range)</span></div>
+    <div class="field"><span class="flbl">Gender</span><span class="fval green">All Genders</span></div>
+    <div class="tip-box">💡 Keep age broad for Lookalike — Meta has already identified the demographic profile from your source audience. Don't over-constrain it.</div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">5</div>
+    <h4>Interests & Behaviors</h4>
+    <div class="field"><span class="flbl">Interests</span><span class="fval green">NONE — Leave blank</span></div>
+    <div class="field"><span class="flbl">Behaviors</span><span class="fval green">NONE — Leave blank</span></div>
+    <div class="field"><span class="flbl">Narrow Audience</span><span class="fval green">NONE — Do not narrow</span></div>
+  </div>
+
+  <div class="step-box warn">
+    <div class="step-num">6</div>
+    <h4>Exclusions</h4>
+    <div class="field"><span class="flbl">Exclude</span><span class="fval red">Existing Leads</span></div>
+    <div class="field"><span class="flbl">Exclude</span><span class="fval red">Existing Customers</span></div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-num">7</div>
+    <h4>Placements & Schedule</h4>
+    <div class="field"><span class="flbl">Placements</span><span class="fval blue">Advantage+ Placements</span></div>
+    <div class="field"><span class="flbl">Adset Spend Limit</span><span class="fval yellow">Min: ₹500/day — Max: ₹1,400/day</span></div>
+    <div class="field"><span class="flbl">Expected Audience</span><span class="fval green">1,000,000 — 3,000,000 (1M-3M)</span></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ========== COMMON MISTAKES ========== -->
+<div class="section" id="mistakes">
+<div class="px">
+
+  <div class="stitle">Common Mistakes That Kill Real Estate Campaigns</div>
+
+  <div class="card" style="border-left:4px solid #ef4444">
+    <h3 style="color:#f87171">🚫 Targeting Mistakes — Avoid These</h3>
+
+    <div class="step-box danger">
+      <h4>Mistake #1: Using "Everyone in this location" instead of "People LIVING in"</h4>
+      <p style="color:#fca5a5"><strong>Impact:</strong> Tourists, delivery workers, and people just passing through will see your ads. They'll never buy a plot in Kanchipuram.</p>
+      <p><strong>Fix:</strong> ALWAYS select "People living in this location" for every adset.</p>
+    </div>
+
+    <div class="step-box danger">
+      <h4>Mistake #2: Keeping Advantage+ Audience ON for a new campaign</h4>
+      <p style="color:#fca5a5"><strong>Impact:</strong> Meta will ignore your interests and show ads to random people. Good for established accounts with lots of conversion data, but terrible for new campaigns.</p>
+      <p><strong>Fix:</strong> Switch OFF for Weeks 1-4. Only test Advantage+ in Month 2 after you have 50+ lead conversions.</p>
+    </div>
+
+    <div class="step-box danger">
+      <h4>Mistake #3: Adding interests to a Lookalike audience</h4>
+      <p style="color:#fca5a5"><strong>Impact:</strong> Shrinks audience from 2M to 200K. Meta can't optimize delivery with such a small pool. High CPM, high CPL.</p>
+      <p><strong>Fix:</strong> Lookalike = ONLY location + age. No interests, no behaviors, no narrowing.</p>
+    </div>
+
+    <div class="step-box danger">
+      <h4>Mistake #4: Using "Lowest Cost" bid strategy</h4>
+      <p style="color:#fca5a5"><strong>Impact:</strong> Meta will spend your ENTIRE budget with no CPL control. Could get leads at ₹50 or ₹5,000 — no predictability.</p>
+      <p><strong>Fix:</strong> Always use "Cost Cap" at ₹350 for this campaign. Meta will aim to deliver leads near this price.</p>
+    </div>
+
+    <div class="step-box danger">
+      <h4>Mistake #5: Not excluding existing leads</h4>
+      <p style="color:#fca5a5"><strong>Impact:</strong> Same person fills your form 3 times. You think you have 30 leads but actually have 20 unique people. CPL is actually 50% higher than dashboard shows.</p>
+      <p><strong>Fix:</strong> Create Custom Audience from Lead Form submissions, exclude it from ALL adsets.</p>
+    </div>
+
+    <div class="step-box danger">
+      <h4>Mistake #6: Audience overlap between adsets</h4>
+      <p style="color:#fca5a5"><strong>Impact:</strong> Your adsets compete against each other in the auction. You bid against yourself and pay higher CPM.</p>
+      <p><strong>Fix:</strong> Check overlap: Audiences → Select 2 audiences → "Show Audience Overlap." If > 30% overlap, exclude one adset's audience from the other.</p>
+    </div>
+
+    <div class="step-box danger">
+      <h4>Mistake #7: Audience too small (under 200K)</h4>
+      <p style="color:#fca5a5"><strong>Impact:</strong> Same people see your ad 5-10 times in a week. Ad fatigue = CTR drops = CPL skyrockets.</p>
+      <p><strong>Fix:</strong> Target audience must be at least 500K for ₹1,000+/day budget. If too small, remove some "Narrow Audience" restrictions or expand location radius.</p>
+    </div>
+  </div>
+
+  <div class="stitle">Quick Reference — All 5 Adsets Summary</div>
+  <div class="card" style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th style="background:#0f172a;padding:10px;color:#64748b;font-size:11px;text-align:left;border-bottom:2px solid #334155">Setting</th>
+          <th style="background:#0d2818;padding:10px;color:#4ade80;font-size:11px;text-align:center;border-bottom:2px solid #334155">Adset 1<br>Chennai Budget</th>
+          <th style="background:#1a1525;padding:10px;color:#c084fc;font-size:11px;text-align:center;border-bottom:2px solid #334155">Adset 2<br>Kanchipuram</th>
+          <th style="background:#172033;padding:10px;color:#60a5fa;font-size:11px;text-align:center;border-bottom:2px solid #334155">Adset 3<br>Investors</th>
+          <th style="background:#231a0d;padding:10px;color:#fbbf24;font-size:11px;text-align:center;border-bottom:2px solid #334155">Adset 4<br>Offer</th>
+          <th style="background:#0d2818;padding:10px;color:#34d399;font-size:11px;text-align:center;border-bottom:2px solid #334155">Adset 5<br>Lookalike</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Adv+ Audience</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">OFF</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">OFF</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">OFF</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">OFF</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">OFF</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Location Type</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b" colspan="5" style="color:#fbbf24">People LIVING in this location — ALL adsets</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Location</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Chennai 30km</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Kanchi 20km + Sriperumbudur</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Chennai 40km + Coimbatore + Madurai</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Chennai 40km + Kanchi + Vellore</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Tamil Nadu (entire state)</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Age</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">25-45</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">28-55</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">30-55</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">25-50</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">25-55</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Gender</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b" colspan="5">All Genders — ALL adsets</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Narrow Audience?</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">NO</td><td style="padding:8px;text-align:center;font-size:11px;color:#4ade80;border-bottom:1px solid #1e293b">YES (Temple AND Property)</td><td style="padding:8px;text-align:center;font-size:11px;color:#4ade80;border-bottom:1px solid #1e293b">YES (Investment AND Traveler)</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">NO</td><td style="padding:8px;text-align:center;font-size:11px;color:#f87171;border-bottom:1px solid #1e293b">NO (no interests at all)</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Conversion</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Instant Form</td><td style="padding:8px;text-align:center;font-size:11px;color:#4ade80;border-bottom:1px solid #1e293b">WhatsApp</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Instant Form</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Instant Form</td><td style="padding:8px;text-align:center;font-size:11px;color:#4ade80;border-bottom:1px solid #1e293b">WhatsApp</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Audience Size</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">2M-6M</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">500K-1.5M</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">300K-1M</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">2M-8M</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">1M-3M</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px;border-bottom:1px solid #1e293b">Video Script</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Script 01</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Script 02</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Script 03</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Script 04</td><td style="padding:8px;text-align:center;font-size:11px;border-bottom:1px solid #1e293b">Script 01+03</td></tr>
+        <tr><td style="padding:8px;font-weight:700;font-size:12px">Placements</td><td style="padding:8px;text-align:center;font-size:11px" colspan="5" style="color:#60a5fa">Advantage+ Placements (ON) — ALL adsets</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#475569;font-size:11px;border-top:1px solid #1e293b;margin-top:20px">
+  Arcadia Aerocity — Audience Setup Guide | Performance Marketing Intelligence | March 2026
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+}
+</script>
+</body>
+</html>

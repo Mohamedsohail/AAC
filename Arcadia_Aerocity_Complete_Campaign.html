@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcadia Aerocity — Complete Campaign Plan & Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; }
+
+  /* Navigation */
+  .nav { position: sticky; top: 0; z-index: 100; background: #0f172a; border-bottom: 2px solid #2563eb; display: flex; overflow-x: auto; }
+  .nav a { padding: 14px 22px; color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 600; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  .nav a:hover, .nav a.active { color: #60a5fa; border-bottom-color: #3b82f6; background: #1e293b; }
+
+  /* Sections */
+  .section { display: none; padding: 20px; }
+  .section.active { display: block; }
+
+  /* Header */
+  .hero { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 50%, #1a1a2e 100%); padding: 30px; text-align: center; border-bottom: 3px solid #2563eb; }
+  .hero h1 { font-size: 28px; color: #fff; margin-bottom: 8px; }
+  .hero h1 span { color: #60a5fa; }
+  .hero .sub { color: #94a3b8; font-size: 14px; }
+  .hero .badges { margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .hero .badge { background: #1e293b; border: 1px solid #334155; padding: 6px 14px; border-radius: 20px; font-size: 11px; color: #93c5fd; }
+
+  /* Alert */
+  .alert { margin: 15px 20px; padding: 14px 20px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+  .alert.red { background: #7f1d1d; border-left: 4px solid #ef4444; }
+  .alert.green { background: #064e3b; border-left: 4px solid #22c55e; }
+  .alert.orange { background: #78350f; border-left: 4px solid #f59e0b; }
+
+  /* KPI Grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 15px 20px; }
+  .kpi { background: #1e293b; border-radius: 12px; padding: 18px; border: 1px solid #334155; position: relative; overflow: hidden; }
+  .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .kpi.g::before { background: #22c55e; } .kpi.r::before { background: #ef4444; } .kpi.o::before { background: #f59e0b; } .kpi.b::before { background: #3b82f6; }
+  .kpi .lb { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 8px; }
+  .kpi .val { font-size: 26px; font-weight: 700; }
+  .kpi .sm { font-size: 11px; margin-top: 6px; }
+  .kpi .sm.good { color: #4ade80; } .kpi .sm.bad { color: #f87171; } .kpi .sm.neu { color: #94a3b8; }
+
+  /* Cards */
+  .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-bottom: 15px; }
+  .card h3 { font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; }
+
+  /* Section Title */
+  .stitle { padding: 20px 20px 10px; font-size: 16px; font-weight: 600; color: #60a5fa; display: flex; align-items: center; gap: 8px; }
+  .stitle::before { content: ''; width: 4px; height: 20px; background: #3b82f6; border-radius: 2px; }
+
+  /* Grid Layouts */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 15px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 0 20px 15px; }
+  .g2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; padding: 0 20px 15px; }
+  .px { padding: 0 20px 15px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #0f172a; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #64748b; border-bottom: 2px solid #334155; }
+  td { padding: 10px 12px; border-bottom: 1px solid #1e3a5f; font-size: 12px; }
+  tr:hover { background: #263548; }
+
+  /* Badges */
+  .bg { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; display: inline-block; }
+  .bg.scale { background: #064e3b; color: #34d399; } .bg.pause { background: #7f1d1d; color: #fca5a5; }
+  .bg.opt { background: #78350f; color: #fbbf24; } .bg.mon { background: #1e3a5f; color: #93c5fd; }
+  .bg.hot { background: #7f1d1d; color: #fca5a5; } .bg.new { background: #064e3b; color: #34d399; }
+
+  /* Video Script Cards */
+  .vcard { background: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow: hidden; }
+  .vcard .vtop { padding: 14px 18px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+  .vcard .vtop h4 { font-size: 14px; color: #fff; }
+  .vcard .vbody { padding: 14px 18px; }
+  .vcard .vrow { display: flex; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+  .vcard .vrow .vlbl { color: #64748b; min-width: 90px; flex-shrink: 0; }
+  .vcard .vrow .vval { color: #e2e8f0; }
+  .vcard .vhook { background: #172033; border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 11px; color: #fbbf24; border-left: 3px solid #f59e0b; }
+
+  /* Reco Items */
+  .ritem { padding: 10px 0; border-bottom: 1px solid #293548; font-size: 12px; line-height: 1.6; }
+  .ritem:last-child { border: none; }
+  .rnum { display: inline-flex; width: 22px; height: 22px; background: #2563eb; border-radius: 50%; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; margin-right: 8px; flex-shrink: 0; }
+
+  /* Timeline */
+  .tl { position: relative; padding-left: 30px; }
+  .tl::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: #334155; }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-item::before { content: ''; position: absolute; left: -24px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #3b82f6; border: 2px solid #0f172a; }
+  .tl-item.done::before { background: #22c55e; }
+  .tl-item h4 { font-size: 13px; color: #fff; margin-bottom: 4px; }
+  .tl-item p { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+
+  /* Form Preview */
+  .form-preview { background: #172033; border-radius: 12px; padding: 20px; border: 2px solid #334155; max-width: 400px; margin: 0 auto; }
+  .form-preview h4 { text-align: center; color: #fff; margin-bottom: 4px; }
+  .form-preview .fp-sub { text-align: center; color: #94a3b8; font-size: 11px; margin-bottom: 15px; }
+  .form-preview .fp-field { background: #1e293b; border: 1px solid #475569; border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; font-size: 12px; color: #94a3b8; }
+  .form-preview .fp-field.filled { color: #60a5fa; border-color: #3b82f6; }
+  .form-preview .fp-btn { background: #2563eb; color: #fff; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 13px; margin-top: 10px; }
+
+  /* Charts */
+  .chart-wrap { padding: 0 20px 15px; }
+
+  .footer { text-align: center; padding: 20px; color: #475569; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 20px; }
+
+  @media (max-width: 900px) { .g2, .g3, .g2-1 { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>ARCADIA <span>AEROCITY</span> — Campaign Command Center</h1>
+  <div class="sub">Propshell's 180-Acre Premium Township | Kanchipuram | Meta Ads Lead Generation</div>
+  <div class="badges">
+    <span class="badge">₹13 Lakhs Starting</span>
+    <span class="badge">DTCP & RERA</span>
+    <span class="badge">Near Parandur Airport</span>
+    <span class="badge">180 Acres</span>
+    <span class="badge">Target CPL: ₹350</span>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav" id="nav">
+  <a href="#" onclick="showTab('dashboard')" class="active" id="nav-dashboard">📊 Live Dashboard</a>
+  <a href="#" onclick="showTab('campaign')" id="nav-campaign">🎯 Campaign Plan</a>
+  <a href="#" onclick="showTab('videos')" id="nav-videos">🎬 Video Ad Matrix</a>
+  <a href="#" onclick="showTab('leadform')" id="nav-leadform">📝 Lead Form</a>
+  <a href="#" onclick="showTab('budget')" id="nav-budget">💰 Budget & Scale</a>
+  <a href="#" onclick="showTab('monitor')" id="nav-monitor">⚡ Daily Monitor</a>
+  <a href="#" onclick="showTab('actions')" id="nav-actions">🔥 Today's Actions</a>
+</div>
+
+<!-- ===================== TAB 1: LIVE DASHBOARD ===================== -->
+<div class="section active" id="dashboard">
+
+  <div class="alert red">
+    <span>⚠️</span>
+    <div><strong>PERFORMANCE ALERT:</strong> Current CPL at ₹983 is 2.8x above ₹350 target. 7 ads generating ZERO leads with ₹6,135 wasted spend. New Arcadia Aerocity campaign plan ready to deploy — projected to cut CPL by 65%.</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi b"><div class="lb">Total Spend (7d)</div><div class="val" style="color:#60a5fa">₹35,381</div><div class="sm neu">₹5,054/day avg</div></div>
+    <div class="kpi r"><div class="lb">Total Leads</div><div class="val" style="color:#f87171">36</div><div class="sm bad">Target: 70+/week</div></div>
+    <div class="kpi r"><div class="lb">Cost Per Lead</div><div class="val" style="color:#f87171">₹983</div><div class="sm bad">Target: ₹350 | 2.8x over</div></div>
+    <div class="kpi o"><div class="lb">CTR</div><div class="val" style="color:#fbbf24">0.78%</div><div class="sm bad">Target: >1.5%</div></div>
+    <div class="kpi o"><div class="lb">CPC</div><div class="val" style="color:#fbbf24">₹23.26</div><div class="sm bad">Target: <₹15</div></div>
+    <div class="kpi g"><div class="lb">Reach</div><div class="val" style="color:#4ade80">100,977</div><div class="sm good">Frequency: 1.93</div></div>
+  </div>
+
+  <div class="g2-1">
+    <div class="card"><h3>Daily Spend vs Leads</h3><canvas id="dailyChart" height="100"></canvas></div>
+    <div class="card"><h3>Leads by Campaign</h3><canvas id="pieChart" height="200"></canvas></div>
+  </div>
+
+  <div class="g2">
+    <div class="card"><h3>CPL Trend (Target: ₹350)</h3><canvas id="cplChart" height="120"></canvas></div>
+    <div class="card"><h3>CTR Trend (Target: 1.5%)</h3><canvas id="ctrChart" height="120"></canvas></div>
+  </div>
+
+  <div class="stitle">Ad-Level Performance</div>
+  <div class="px">
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Campaign</th><th>Adset</th><th>Ad Name</th><th>Spend</th><th>Clicks</th><th>CTR</th><th>Leads</th><th>CPL</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Andromeda</td><td>Chennai</td><td>Nagarin Idhayam</td><td>₹2,061</td><td>105</td><td>0.65%</td><td style="color:#4ade80">5</td><td style="color:#4ade80">₹412</td><td><span class="bg scale">↑ SCALE 30%</span></td></tr>
+          <tr><td>Andromeda</td><td>Chennai</td><td>Zenwee MPN Video 1</td><td>₹4,229</td><td>280</td><td>1.42%</td><td style="color:#4ade80">9</td><td style="color:#4ade80">₹470</td><td><span class="bg scale">↑ SCALE 20%</span></td></tr>
+          <tr><td>Campaign 12</td><td>Anna Nagar</td><td>Creatives 1 Copy</td><td>₹1,496</td><td>61</td><td>1.02%</td><td style="color:#4ade80">3</td><td style="color:#4ade80">₹499</td><td><span class="bg scale">↑ SCALE 20%</span></td></tr>
+          <tr><td>Campaign 12</td><td>Maha Periyvar</td><td>Voice Over Ad 4</td><td>₹949</td><td>16</td><td>1.11%</td><td style="color:#4ade80">2</td><td style="color:#4ade80">₹475</td><td><span class="bg scale">↑ SCALE 25%</span></td></tr>
+          <tr><td>Andromeda</td><td>Chennai</td><td>Radhika Creatives</td><td>₹7,102</td><td>151</td><td>0.65%</td><td style="color:#fbbf24">10</td><td style="color:#fbbf24">₹710</td><td><span class="bg opt">⚡ OPTIMIZE</span></td></tr>
+          <tr><td>Campaign 12</td><td>Kanchipuram</td><td>Creatives 1 Copy</td><td>₹5,929</td><td>562</td><td>0.62%</td><td style="color:#fbbf24">4</td><td style="color:#f87171">₹1,482</td><td><span class="bg opt">⚡ OPTIMIZE</span></td></tr>
+          <tr style="background:#1a1525"><td>Campaign 12</td><td>Maha Periyvar</td><td>Ad 3 - Maha Periyavar</td><td>₹1,635</td><td>30</td><td>0.75%</td><td style="color:#f87171">0</td><td>—</td><td><span class="bg pause">⛔ PAUSE</span></td></tr>
+          <tr style="background:#1a1525"><td>Campaign 12</td><td>IT Professionals</td><td>Zenwee Sitevisit</td><td>₹1,642</td><td>14</td><td>0.89%</td><td style="color:#f87171">0</td><td>—</td><td><span class="bg pause">⛔ PAUSE</span></td></tr>
+          <tr style="background:#1a1525"><td>Campaign 12</td><td>Anna Nagar</td><td>Zenwee Sitevisit</td><td>₹1,926</td><td>29</td><td>1.17%</td><td style="color:#f87171">0</td><td>—</td><td><span class="bg pause">⛔ PAUSE</span></td></tr>
+          <tr style="background:#1a1525"><td>Andromeda</td><td>Chennai</td><td>MPN Creatives</td><td>₹921</td><td>18</td><td>0.73%</td><td style="color:#f87171">0</td><td>—</td><td><span class="bg pause">⛔ PAUSE</span></td></tr>
+          <tr style="background:#1a1525"><td>Campaign 12</td><td>Maha Periyvar</td><td>Creatives 1</td><td>₹867</td><td>20</td><td>0.81%</td><td style="color:#f87171">0</td><td>—</td><td><span class="bg pause">⛔ PAUSE</span></td></tr>
+          <tr style="background:#1a1525"><td>Campaign 12</td><td>Sriperumbudur</td><td>Zenwee Kanchipuram</td><td>₹906</td><td>23</td><td>1.02%</td><td style="color:#f87171">0</td><td>—</td><td><span class="bg pause">⛔ PAUSE</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Campaign Comparison -->
+  <div class="stitle">Campaign vs Campaign</div>
+  <div class="g2">
+    <div class="card" style="border-left:3px solid #ef4444">
+      <h3 style="color:#f87171">Campaign 12 — AAC LG (Since Mar 2025)</h3>
+      <table><tr><td style="color:#94a3b8">Spend</td><td style="text-align:right;font-weight:700">₹20,731</td></tr><tr><td style="color:#94a3b8">Leads</td><td style="text-align:right;font-weight:700;color:#f87171">12</td></tr><tr><td style="color:#94a3b8">CPL</td><td style="text-align:right;font-weight:700;color:#f87171">₹1,728</td></tr><tr><td style="color:#94a3b8">CTR</td><td style="text-align:right">0.72%</td></tr><tr><td style="color:#94a3b8">Verdict</td><td style="text-align:right"><span class="bg pause">RESTRUCTURE URGENTLY</span></td></tr></table>
+    </div>
+    <div class="card" style="border-left:3px solid #22c55e">
+      <h3 style="color:#4ade80">Andromeda Leads (Since Mar 13, 2026)</h3>
+      <table><tr><td style="color:#94a3b8">Spend</td><td style="text-align:right;font-weight:700">₹14,651</td></tr><tr><td style="color:#94a3b8">Leads</td><td style="text-align:right;font-weight:700;color:#4ade80">24</td></tr><tr><td style="color:#94a3b8">CPL</td><td style="text-align:right;font-weight:700;color:#fbbf24">₹610</td></tr><tr><td style="color:#94a3b8">CTR</td><td style="text-align:right">0.90%</td></tr><tr><td style="color:#94a3b8">Verdict</td><td style="text-align:right"><span class="bg scale">SCALE UP — MOVE BUDGET HERE</span></td></tr></table>
+    </div>
+  </div>
+
+  <!-- Projected Impact -->
+  <div class="stitle">Projected Impact — After New Campaign Launch</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="kpi g"><div class="lb">Weekly Savings</div><div class="val" style="color:#4ade80;font-size:20px">₹6,135</div><div class="sm good">From pausing dead ads</div></div>
+    <div class="kpi g"><div class="lb">New Campaign CPL</div><div class="val" style="color:#4ade80;font-size:20px">₹300-400</div><div class="sm good">Down from ₹983</div></div>
+    <div class="kpi g"><div class="lb">Monthly Leads</div><div class="val" style="color:#4ade80;font-size:20px">450-550</div><div class="sm good">5 video scripts + 5 adsets</div></div>
+    <div class="kpi g"><div class="lb">Monthly Site Visits</div><div class="val" style="color:#4ade80;font-size:20px">65-80</div><div class="sm good">At 15% conversion rate</div></div>
+  </div>
+</div>
+
+<!-- ===================== TAB 2: CAMPAIGN PLAN ===================== -->
+<div class="section" id="campaign">
+
+  <div class="stitle">Campaign Level Settings</div>
+  <div class="px"><div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th style="width:25%">Setting</th><th style="width:35%">Value</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">Campaign Name</td><td>Arcadia Aerocity P2 — Lead Gen — Adv+ — Mar 2026</td><td>Fresh campaign, clean learning phase</td></tr>
+        <tr><td style="font-weight:700">Objective</td><td>Leads (Instant Forms + WhatsApp)</td><td>WhatsApp leads 40% higher quality in India real estate</td></tr>
+        <tr><td style="font-weight:700">Budget</td><td>Advantage Campaign Budget (CBO) — ₹6,000/day</td><td>Meta auto-optimizes across best adsets</td></tr>
+        <tr><td style="font-weight:700">Bid Strategy</td><td>Cost Cap at ₹350/lead</td><td>Hard cap prevents CPL blowout</td></tr>
+        <tr><td style="font-weight:700">Attribution</td><td>7-day click, 1-day view</td><td>Standard for lead gen</td></tr>
+        <tr><td style="font-weight:700">Placements</td><td>Advantage+ (All — FB, IG, Reels, Stories, AN)</td><td>Let Meta find cheapest leads everywhere</td></tr>
+        <tr><td style="font-weight:700">Conversion Location</td><td>Instant Forms + WhatsApp (A/B Test)</td><td>Test both, scale the winner</td></tr>
+        <tr><td style="font-weight:700">Pixel</td><td>Meta Pixel on arcadiaaerocity.propshell.com</td><td>Track Lead + ViewContent for retargeting</td></tr>
+        <tr><td style="font-weight:700">Landing Page</td><td>arcadiaaerocity.propshell.com</td><td>Dedicated landing page for this project</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="stitle">5 Adsets — Each Mapped to a Video Script</div>
+  <div class="px">
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Adset</th><th>Audience</th><th>Age</th><th>Video Script</th><th>Budget %</th><th>Expected CPL</th></tr></thead>
+        <tbody>
+          <tr style="background:#0d2818"><td style="font-weight:700;color:#4ade80">1. Chennai Low Budget</td><td>Chennai +30km | Affordable Housing, Plots, Home Loans, First-Time Buyers</td><td>25-45</td><td>Script 01 — Low Budget & Chennai</td><td style="text-align:center">25%</td><td style="color:#4ade80">₹300-400</td></tr>
+          <tr style="background:#1a1525"><td style="font-weight:700;color:#c084fc">2. Kanchipuram Spiritual</td><td>Kanchipuram +20km, Sriperumbudur +15km | Temples, Spiritual Tourism, Land Purchase</td><td>28-55</td><td>Script 02 — Kanchipuram Spiritual</td><td style="text-align:center">20%</td><td style="color:#4ade80">₹250-350</td></tr>
+          <tr style="background:#172033"><td style="font-weight:700;color:#60a5fa">3. Investors & NRI</td><td>Chennai Metro + TN NRI | Real Estate Investment, Property, Stock Market, Frequent Travelers</td><td>30-55</td><td>Script 03 — Investment 360° Tour</td><td style="text-align:center">20%</td><td style="color:#fbbf24">₹400-500</td></tr>
+          <tr style="background:#231a0d"><td style="font-weight:700;color:#fbbf24">4. Offer / Deal Hunters</td><td>Chennai +40km (broad) | Real Estate Deals, Festival Sales, Discount Shopping</td><td>25-50</td><td>Script 04 — Nethi Adi Offer (100sqft FREE)</td><td style="text-align:center">20%</td><td style="color:#4ade80">₹250-350</td></tr>
+          <tr style="background:#0d2818"><td style="font-weight:700;color:#34d399">5. Lookalike Audience</td><td>1% LAL of best past AAC leads | Tamil Nadu</td><td>25-55</td><td>Script 01 + 03 (Best performers)</td><td style="text-align:center">15%</td><td style="color:#4ade80">₹200-300</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="stitle">A/B Test Plan (3 Variants Per Adset)</div>
+  <div class="px"><div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Adset</th><th>Variant A (Primary)</th><th>Variant B</th><th>Variant C</th><th>Test Variable</th><th>Kill If</th><th>Scale If</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">Adset 1</td><td>Script 01 + Instant Form</td><td>Script 01 + WhatsApp</td><td>Script 01 as Carousel</td><td>Conversion Location</td><td>CPL > ₹600 @ ₹1,500 spend</td><td>CPL < ₹350 + 3 leads</td></tr>
+        <tr><td style="font-weight:700">Adset 2</td><td>Script 02 + WhatsApp</td><td>Script 02 + Instant Form</td><td>Static: Temple + Plot</td><td>Creative Format</td><td>CPL > ₹600 @ ₹1,500 spend</td><td>CPL < ₹350 + 2 leads</td></tr>
+        <tr><td style="font-weight:700">Adset 3</td><td>Script 03 (360° Tour)</td><td>Script 03 Slideshow</td><td>Carousel: Amenities + Price</td><td>Creative Depth</td><td>CPL > ₹700 @ ₹2,000 spend</td><td>CPL < ₹500 + quality</td></tr>
+        <tr><td style="font-weight:700">Adset 4</td><td>Script 04 Reels (15s)</td><td>Script 04 Full (30s)</td><td>Static: "100sqft FREE"</td><td>Video Length</td><td>CPL > ₹500 @ ₹1,000 spend</td><td>CPL < ₹300 + 5 leads</td></tr>
+        <tr><td style="font-weight:700">Adset 5</td><td>Script 03 + LAL</td><td>Script 01 + LAL</td><td>Best from other adsets</td><td>Creative Match</td><td>CPL > ₹500 @ ₹1,500 spend</td><td>CPL < ₹300</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<!-- ===================== TAB 3: VIDEO AD MATRIX ===================== -->
+<div class="section" id="videos">
+
+  <div class="stitle">5 Video Scripts — Complete Ad Configuration</div>
+
+  <div class="g2">
+    <!-- Script 01 -->
+    <div class="vcard">
+      <div class="vtop" style="background:#0d2818"><h4>🎬 Script 01 — Low Budget & Chennai</h4><span class="bg new">HIGH PRIORITY</span></div>
+      <div class="vbody">
+        <div class="vrow"><span class="vlbl">Target:</span><span class="vval">Adset 1 — Chennai Low Budget Buyers</span></div>
+        <div class="vrow"><span class="vlbl">Format:</span><span class="vval">Video Ad (30-60 sec) — FB Feed + IG Feed + Reels</span></div>
+        <div class="vrow"><span class="vlbl">Tamil Head:</span><span class="vval" style="color:#fbbf24">வெறும் 13 லட்சத்தில் சொந்த மனை! Chennai பக்கத்தில்</span></div>
+        <div class="vrow"><span class="vlbl">English:</span><span class="vval">Own Land from ₹13 Lakhs! Near Chennai Airport</span></div>
+        <div class="vrow"><span class="vlbl">Primary Text:</span><span class="vval">180 ஏக்கர் Township | DTCP & RERA | Schools, Hospitals, Club House | Free Site Visit — Arcadia Aerocity</span></div>
+        <div class="vrow"><span class="vlbl">CTA:</span><span class="vval" style="color:#60a5fa">Book Now → Instant Form</span></div>
+        <div class="vhook">🎯 First 3 Seconds: "Budget problem-aa? Just 13 lakhs-la sondha land!" — Price shock opens with affordability pain point</div>
+      </div>
+    </div>
+
+    <!-- Script 02 -->
+    <div class="vcard">
+      <div class="vtop" style="background:#1a1525"><h4>🎬 Script 02 — Kanchipuram Spiritual</h4><span class="bg new">HIGH PRIORITY</span></div>
+      <div class="vbody">
+        <div class="vrow"><span class="vlbl">Target:</span><span class="vval">Adset 2 — Kanchipuram Spiritual + Local</span></div>
+        <div class="vrow"><span class="vlbl">Format:</span><span class="vval">Video Ad (30-60 sec) — FB Feed + IG + Stories</span></div>
+        <div class="vrow"><span class="vlbl">Tamil Head:</span><span class="vval" style="color:#fbbf24">காஞ்சி காமாட்சி அருகில் DTCP Plot ₹2,200/sq.ft</span></div>
+        <div class="vrow"><span class="vlbl">English:</span><span class="vval">Near Kanchi Kamachi Temple — DTCP Plot from ₹2,200/sq.ft</span></div>
+        <div class="vrow"><span class="vlbl">Primary Text:</span><span class="vval">புனித பூமியில் சொந்த மனை | RERA Approved | 90% Loan | Greenfield Airport nearby</span></div>
+        <div class="vrow"><span class="vlbl">CTA:</span><span class="vval" style="color:#4ade80">Get Directions → WhatsApp</span></div>
+        <div class="vhook">🎯 First 3 Seconds: "Kanchipuram = Temples + Now Premium Plots!" — Emotional spiritual connection opens</div>
+      </div>
+    </div>
+
+    <!-- Script 03 -->
+    <div class="vcard">
+      <div class="vtop" style="background:#172033"><h4>🎬 Script 03 — Investment & 360° Tour</h4><span class="bg mon">PREMIUM</span></div>
+      <div class="vbody">
+        <div class="vrow"><span class="vlbl">Target:</span><span class="vval">Adset 3 — Investors & NRI</span></div>
+        <div class="vrow"><span class="vlbl">Format:</span><span class="vval">Video Ad (30-60 sec) with 360° site tour — All placements</span></div>
+        <div class="vrow"><span class="vlbl">Tamil Head:</span><span class="vval" style="color:#fbbf24">Airport வரப்போகுது! Land Value 3x ஆகும்</span></div>
+        <div class="vrow"><span class="vlbl">English:</span><span class="vval">Airport Coming! Land Value Set to 3x</span></div>
+        <div class="vrow"><span class="vlbl">Primary Text:</span><span class="vval">180-acre Gated Community | Cricket, Football, Pickleball Turf | Grand Entry | EB + Water — Investment-grade villa plots</span></div>
+        <div class="vrow"><span class="vlbl">CTA:</span><span class="vval" style="color:#60a5fa">Learn More → Instant Form</span></div>
+        <div class="vhook">🎯 First 3 Seconds: "Trust me, intha site ungaluku romba pudikkum" — Personal trust-building, site reveal</div>
+      </div>
+    </div>
+
+    <!-- Script 04 -->
+    <div class="vcard">
+      <div class="vtop" style="background:#231a0d"><h4>🎬 Script 04 — Nethi Adi Offer (100sqft FREE)</h4><span class="bg hot">VOLUME DRIVER</span></div>
+      <div class="vbody">
+        <div class="vrow"><span class="vlbl">Target:</span><span class="vval">Adset 4 — Offer / Deal Hunters</span></div>
+        <div class="vrow"><span class="vlbl">Format:</span><span class="vval">Reels Video (15-30 sec) — IG Reels + FB Reels + Stories</span></div>
+        <div class="vrow"><span class="vlbl">Tamil Head:</span><span class="vval" style="color:#fbbf24">100 sq.ft Land FREE! நேத்தி அடி Offer</span></div>
+        <div class="vrow"><span class="vlbl">English:</span><span class="vval">100 sq.ft Land FREE! Nethi Adi Offer</span></div>
+        <div class="vrow"><span class="vlbl">Primary Text:</span><span class="vval">Book a plot → Get 100 sq.ft FREE! | 180 Acres | 100+ Amenities | Limited slots — Offer ending soon!</span></div>
+        <div class="vrow"><span class="vlbl">CTA:</span><span class="vval" style="color:#f87171">Claim Offer → Instant Form</span></div>
+        <div class="vhook">🎯 First 3 Seconds: "Kocham kitta vaagaley — 100 sq.ft FREE!" — Free offer shock, instant hook</div>
+      </div>
+    </div>
+
+    <!-- Script 05 -->
+    <div class="vcard">
+      <div class="vtop" style="background:#0d2818"><h4>🎬 Script 05 — Testimonial (Create New)</h4><span class="bg scale">TRUST BUILDER</span></div>
+      <div class="vbody">
+        <div class="vrow"><span class="vlbl">Target:</span><span class="vval">Adset 5 — Lookalike Audience</span></div>
+        <div class="vrow"><span class="vlbl">Format:</span><span class="vval">UGC-style Video (15-30 sec) — Reels + Stories</span></div>
+        <div class="vrow"><span class="vlbl">Tamil Head:</span><span class="vval" style="color:#fbbf24">நான் Plot வாங்கிட்டேன்! You Should Too</span></div>
+        <div class="vrow"><span class="vlbl">English:</span><span class="vval">I Booked My Plot! Here's Why You Should Too</span></div>
+        <div class="vrow"><span class="vlbl">Primary Text:</span><span class="vval">Real buyer testimonial + site visit footage | 180 Acres | ₹13L Starting | DTCP & RERA</span></div>
+        <div class="vrow"><span class="vlbl">CTA:</span><span class="vval" style="color:#4ade80">Book Now → WhatsApp</span></div>
+        <div class="vhook">🎯 First 3 Seconds: Real person face + "Naan book pannitein!" — Social proof, instant credibility</div>
+      </div>
+    </div>
+
+    <!-- Ad Copy Cheat Sheet -->
+    <div class="vcard">
+      <div class="vtop" style="background:#1e3a5f"><h4>📋 Ad Copy Cheat Sheet — Winning Elements</h4></div>
+      <div class="vbody">
+        <div class="vrow"><span class="vlbl">Price Anchor:</span><span class="vval">Always lead with "₹13 Lakhs" or "₹2,200/sq.ft" — removes "too expensive" objection instantly</span></div>
+        <div class="vrow"><span class="vlbl">Trust Signal:</span><span class="vval">DTCP & RERA in every ad — #1 objection in Tamil Nadu real estate</span></div>
+        <div class="vrow"><span class="vlbl">Proximity:</span><span class="vval">"10 min from Kanchi Kamachi" / "Near Parandur Airport" — location sells plots</span></div>
+        <div class="vrow"><span class="vlbl">Urgency:</span><span class="vval">"Limited slots" / "Nethi Adi Offer" — creates FOMO for deal-seekers</span></div>
+        <div class="vrow"><span class="vlbl">Social Proof:</span><span class="vval">"19 years in Real Estate" / "200+ families" — builds developer trust</span></div>
+        <div class="vrow"><span class="vlbl">Language:</span><span class="vval">ALL primary text in Tamil for Chennai audiences — your best-performing ads are Tamil voiceovers</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 4: LEAD FORM ===================== -->
+<div class="section" id="leadform">
+
+  <div class="stitle">Instant Lead Form Design</div>
+  <div class="g2">
+    <div class="card">
+      <h3>Form Structure</h3>
+      <table>
+        <tr><td style="font-weight:700;color:#60a5fa;width:30%">Form Type</td><td>More Volume (Week 1-2) → Switch to Higher Intent (Week 3+)</td></tr>
+        <tr><td style="font-weight:700;color:#60a5fa">Intro Image</td><td>Drone shot of 180-acre site with "₹13 Lakhs Starting" overlay</td></tr>
+        <tr><td style="font-weight:700;color:#60a5fa">Headline</td><td>Book Your FREE Site Visit — Arcadia Aerocity Phase 2</td></tr>
+        <tr><td style="font-weight:700;color:#60a5fa">Description</td><td>180 Acres | DTCP & RERA | Near Greenfield Airport | ₹13 Lakhs Starting</td></tr>
+        <tr><td style="font-weight:700;color:#4ade80">Q1 (Prefilled)</td><td>Full Name — Auto-prefilled from Facebook</td></tr>
+        <tr><td style="font-weight:700;color:#4ade80">Q2 (Prefilled)</td><td>Phone Number — Auto-prefilled</td></tr>
+        <tr><td style="font-weight:700;color:#fbbf24">Q3 (Custom)</td><td>Which plot type? → Villa Plot / Residential Plot / Investment Plot / Not Sure</td></tr>
+        <tr><td style="font-weight:700;color:#fbbf24">Q4 (Custom)</td><td>Budget range? → Under ₹15L / ₹15-25L / ₹25-40L / ₹40L+</td></tr>
+        <tr><td style="font-weight:700;color:#fbbf24">Q5 (Custom)</td><td>When to buy? → This Month / 1-3 Months / 3-6 Months / Just Exploring</td></tr>
+        <tr><td style="font-weight:700;color:#60a5fa">Thank You</td><td>"Our team will call within 30 minutes!" + "Get Directions" button</td></tr>
+      </table>
+    </div>
+
+    <!-- Form Preview -->
+    <div style="display:flex;justify-content:center;align-items:flex-start">
+      <div class="form-preview">
+        <div style="background:#2563eb;border-radius:8px;padding:12px;margin-bottom:12px;text-align:center;font-size:11px;color:#93c5fd">📸 [Drone Shot — 180 Acre Township]</div>
+        <h4>Book Your FREE Site Visit</h4>
+        <div class="fp-sub">Arcadia Aerocity Phase 2 | ₹13 Lakhs Starting</div>
+        <div class="fp-field filled">👤 Rajesh Kumar (prefilled)</div>
+        <div class="fp-field filled">📱 98765 43210 (prefilled)</div>
+        <div class="fp-field">🏠 Which plot? ▾ Villa Plot / Residential / Investment</div>
+        <div class="fp-field">💰 Budget range? ▾ Under 15L / 15-25L / 25-40L</div>
+        <div class="fp-field">📅 When to buy? ▾ This Month / 1-3 Months</div>
+        <div class="fp-btn">Submit — Book Free Site Visit</div>
+        <div style="text-align:center;font-size:10px;color:#64748b;margin-top:8px">Privacy Policy</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stitle">WhatsApp Flow (For Adsets 2 & 5)</div>
+  <div class="px"><div class="card">
+    <h3>WhatsApp Auto-Reply Sequence</h3>
+    <div class="tl">
+      <div class="tl-item"><h4>Welcome Message (Instant)</h4><p>நமஸ்காரம் 🙏 Arcadia Aerocity Phase 2 பற்றி தெரிந்து கொள்ள ஆர்வமா?<br>180 Acres | ₹13 Lakhs Starting | DTCP & RERA Approved<br><br>Reply with your name to get pricing details.</p></div>
+      <div class="tl-item"><h4>Auto-Reply 1 (After Name)</h4><p>Thank you [Name]! Our property advisor will call within 15 minutes.<br>📍 Location: Maha Periyavar Nagar, Kanchipuram<br>💰 Starting: ₹13 Lakhs<br>✅ DTCP & RERA Approved<br><br>Want to book a FREE site visit? Reply YES</p></div>
+      <div class="tl-item"><h4>Auto-Reply 2 (After YES)</h4><p>Site visit booked! Our team will call to confirm timing.<br>📞 For immediate help: [Your sales number]</p></div>
+      <div class="tl-item done"><h4>Why WhatsApp Wins in Real Estate</h4><p>WhatsApp leads convert 2-3x higher: personal connection, can share site photos/videos directly, easy follow-up without cold calling, higher buyer intent.</p></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ===================== TAB 5: BUDGET & SCALE ===================== -->
+<div class="section" id="budget">
+
+  <div class="stitle">Daily Budget Allocation</div>
+  <div class="px"><div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Adset</th><th>Daily (₹)</th><th>%</th><th>Monthly (₹)</th><th>Target CPL</th><th>Leads/Month</th><th>Site Visits (15%)</th><th>Bookings (3%)</th></tr></thead>
+      <tbody>
+        <tr style="background:#0d2818"><td style="font-weight:700">1. Chennai Low Budget</td><td>₹1,500</td><td>25%</td><td>₹45,000</td><td>₹350</td><td style="color:#4ade80">128</td><td>19</td><td>3-4</td></tr>
+        <tr><td style="font-weight:700">2. Kanchipuram Spiritual</td><td>₹1,200</td><td>20%</td><td>₹36,000</td><td>₹300</td><td style="color:#4ade80">120</td><td>18</td><td>3-4</td></tr>
+        <tr><td style="font-weight:700">3. Investors & NRI</td><td>₹1,200</td><td>20%</td><td>₹36,000</td><td>₹450</td><td>80</td><td>12</td><td>2-3</td></tr>
+        <tr style="background:#231a0d"><td style="font-weight:700">4. Offer (Nethi Adi)</td><td>₹1,200</td><td>20%</td><td>₹36,000</td><td>₹300</td><td style="color:#4ade80">120</td><td>18</td><td>3-4</td></tr>
+        <tr><td style="font-weight:700">5. Lookalike</td><td>₹900</td><td>15%</td><td>₹27,000</td><td>₹250</td><td style="color:#4ade80">108</td><td>16</td><td>3</td></tr>
+        <tr style="background:#1e3a5f"><td style="font-weight:700;color:#60a5fa">TOTAL</td><td style="font-weight:700;color:#60a5fa">₹6,000</td><td style="font-weight:700">100%</td><td style="font-weight:700;color:#60a5fa">₹1,80,000</td><td></td><td style="font-weight:700;color:#4ade80">~556</td><td style="font-weight:700">~83</td><td style="font-weight:700;color:#4ade80">15-18</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="stitle">4-Phase Scaling Roadmap</div>
+  <div class="px">
+    <div class="tl">
+      <div class="tl-item">
+        <h4 style="color:#60a5fa">Phase 1: LAUNCH & TEST (Weeks 1-2) — ₹6,000/day</h4>
+        <p>Launch all 5 adsets × 3 variants = 15 ads. DO NOT touch for 3 days. Day 4: pause zero-lead ads with ₹1,000+ spend. Day 7: first full review. Goal: identify winning script + audience combo.</p>
+      </div>
+      <div class="tl-item">
+        <h4 style="color:#fbbf24">Phase 2: OPTIMIZE & CUT (Weeks 3-4) — ₹6,000/day reallocated</h4>
+        <p>Pause losing adsets/ads. Increase winners by 20%. Launch retargeting (video viewers + form openers). A/B test Higher Intent form. Check lead quality with sales team. CPL target: < ₹350.</p>
+      </div>
+      <div class="tl-item">
+        <h4 style="color:#4ade80">Phase 3: SCALE WINNERS (Month 2) — ₹8,000-10,000/day</h4>
+        <p>Duplicate top adset at 30% higher budget. Create 2 new video variations of winning script. Build Lookalike from Month 1 leads. Consider Google Ads for comparison.</p>
+      </div>
+      <div class="tl-item done">
+        <h4 style="color:#34d399">Phase 4: AUTOMATE & EXPAND (Month 3+) — ₹10,000-15,000/day</h4>
+        <p>Automated rules: pause ads with CPL > 2x target. Launch seasonal campaigns. Expand to Google Display + YouTube. Full funnel: Awareness → Retarget → Lead → Site Visit → Close.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 6: DAILY MONITORING ===================== -->
+<div class="section" id="monitor">
+
+  <div class="alert green">
+    <span>✅</span>
+    <div><strong>AUTO-REPORT ACTIVE:</strong> Your daily dashboard auto-updates at 9:00 AM from Windsor.ai data. Use this monitoring protocol to make decisions.</div>
+  </div>
+
+  <div class="stitle">Daily 9 AM Checklist</div>
+  <div class="px"><div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Time</th><th>Task</th><th>What to Check</th><th>Action</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">9:00</td><td>Open Dashboard</td><td>Review all 6 KPI cards — Spend, Leads, CPL, CTR, CPC, Reach</td><td>Note any metric that's off-target</td><td><span class="bg hot">HIGH</span></td></tr>
+        <tr><td style="font-weight:700">9:15</td><td>Ad-Level Review</td><td>Which ads got leads yesterday? Which spent with 0 leads?</td><td>Identify PAUSE / SCALE candidates</td><td><span class="bg hot">HIGH</span></td></tr>
+        <tr><td style="font-weight:700">9:30</td><td>Lead Quality Check</td><td>CRM update: How many leads contacted? Connected? Interested?</td><td>Update Lead Quality Excel template</td><td><span class="bg pause">CRITICAL</span></td></tr>
+        <tr><td style="font-weight:700">10:00</td><td>Execute Changes</td><td>Pause: ₹1,500+ spend / 0 leads<br>Scale: ↑20% on CPL < ₹350<br>Optimize: new variant for ₹350-₹600</td><td>Make changes in Meta Ads Manager</td><td><span class="bg hot">HIGH</span></td></tr>
+        <tr><td style="font-weight:700">10:30</td><td>Check Frequency</td><td>Any adset frequency > 2.5? Creative fatigue starting?</td><td>Refresh creative or expand audience</td><td><span class="bg opt">MEDIUM</span></td></tr>
+        <tr><td style="font-weight:700">11:00</td><td>Sales Team Sync</td><td>Which leads booked site visits? Common objections?</td><td>Feed quality insights back to targeting</td><td><span class="bg pause">CRITICAL</span></td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="stitle">Decision Rules — When to Act</div>
+  <div class="g3">
+    <div class="card" style="border-left:4px solid #ef4444">
+      <h3 style="color:#f87171">⛔ PAUSE Immediately</h3>
+      <div class="ritem"><span class="rnum">1</span>Ad spent ₹1,500+ with ZERO leads</div>
+      <div class="ritem"><span class="rnum">2</span>Ad CPL > 3x target (₹1,050+) after 3 days</div>
+      <div class="ritem"><span class="rnum">3</span>Adset frequency > 3.5 (audience exhausted)</div>
+      <div class="ritem"><span class="rnum">4</span>Lead quality >50% Junk from that ad</div>
+    </div>
+    <div class="card" style="border-left:4px solid #f59e0b">
+      <h3 style="color:#fbbf24">⚡ OPTIMIZE</h3>
+      <div class="ritem"><span class="rnum">1</span>Has leads but CPL ₹350-₹700 → test new headline/hook</div>
+      <div class="ritem"><span class="rnum">2</span>CTR < 0.8% but some leads → weak first 3 seconds</div>
+      <div class="ritem"><span class="rnum">3</span>Good CPL but junk leads → switch to Higher Intent form</div>
+      <div class="ritem"><span class="rnum">4</span>Try WhatsApp vs Form swap on that ad</div>
+    </div>
+    <div class="card" style="border-left:4px solid #22c55e">
+      <h3 style="color:#4ade80">↑ SCALE</h3>
+      <div class="ritem"><span class="rnum">1</span>CPL < ₹350 + 3 leads in 3 days → ↑20% budget</div>
+      <div class="ritem"><span class="rnum">2</span>CPL < ₹250 + 5 leads in 5 days → ↑30% budget</div>
+      <div class="ritem"><span class="rnum">3</span>Below target CPL for 7+ days → duplicate adset</div>
+      <div class="ritem"><span class="rnum">4</span>Max ↑20% every 3 days to avoid learning reset</div>
+    </div>
+  </div>
+
+  <div class="stitle">Video Script Performance Tracker</div>
+  <div class="px"><div class="card">
+    <h3>Track Which Script Wins (Update weekly)</h3>
+    <table>
+      <thead><tr><th>Script</th><th>Adset</th><th>Week 1 CPL</th><th>Week 2 CPL</th><th>Total Leads</th><th>Lead Quality</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">Script 01 — Low Budget</td><td>Chennai</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td><span class="bg mon">PENDING LAUNCH</span></td></tr>
+        <tr><td style="font-weight:700">Script 02 — Spiritual</td><td>Kanchipuram</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td><span class="bg mon">PENDING LAUNCH</span></td></tr>
+        <tr><td style="font-weight:700">Script 03 — Investment</td><td>Investors</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td><span class="bg mon">PENDING LAUNCH</span></td></tr>
+        <tr><td style="font-weight:700">Script 04 — Nethi Adi</td><td>Deal Hunters</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td><span class="bg mon">PENDING LAUNCH</span></td></tr>
+        <tr><td style="font-weight:700">Script 05 — Testimonial</td><td>Lookalike</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td style="color:#64748b">—</td><td><span class="bg mon">PENDING LAUNCH</span></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;padding:12px;background:#172033;border-radius:8px;font-size:11px;color:#94a3b8">
+      📌 This table will be auto-populated by your daily scheduled report once the Arcadia Aerocity campaign goes live. The daily report at 9 AM will fill in CPL, leads, and recommend SCALE/PAUSE/OPTIMIZE per script.
+    </div>
+  </div></div>
+</div>
+
+<!-- ===================== TAB 7: TODAY'S ACTIONS ===================== -->
+<div class="section" id="actions">
+
+  <div class="alert orange">
+    <span>🔥</span>
+    <div><strong>TODAY'S PRIORITY:</strong> Launch the new Arcadia Aerocity campaign using the structure in Campaign Plan tab. Meanwhile, pause 7 zero-lead ads in existing campaigns to save ₹6,135/week.</div>
+  </div>
+
+  <div class="stitle">Immediate Actions — Do These NOW</div>
+  <div class="g2">
+    <div class="card" style="border-left:4px solid #ef4444">
+      <h3 style="color:#f87171">🔴 STOP — Pause These Ads Today</h3>
+      <div class="ritem"><span class="rnum">1</span><strong>Ad 3 - Maha Periyavar</strong> (₹1,635 spent, 0 leads) — complete waste</div>
+      <div class="ritem"><span class="rnum">2</span><strong>Zenwee Sitevisit - IT Professionals</strong> (₹1,642 spent, 0 leads)</div>
+      <div class="ritem"><span class="rnum">3</span><strong>Zenwee Sitevisit - Anna Nagar</strong> (₹1,926 spent, 0 leads)</div>
+      <div class="ritem"><span class="rnum">4</span><strong>MPN Creatives - Chennai</strong> (₹921, 0 leads)</div>
+      <div class="ritem"><span class="rnum">5</span><strong>Creatives 1 - Maha Periyvar</strong> (₹867, 0 leads)</div>
+      <div class="ritem"><span class="rnum">6</span><strong>Zenwee Kanchipuram - Sriperumbudur</strong> (₹906, 0 leads)</div>
+      <div class="ritem" style="color:#f87171;font-weight:700">Total savings: ₹6,135/week redirected to winners</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #22c55e">
+      <h3 style="color:#4ade80">🟢 SCALE — Increase Budget on Winners</h3>
+      <div class="ritem"><span class="rnum">1</span><strong>Nagarin Idhayam</strong> (CPL ₹412, 5 leads) → ↑30% budget</div>
+      <div class="ritem"><span class="rnum">2</span><strong>Zenwee MPN Video 1</strong> (CPL ₹470, 9 leads) → ↑20% budget</div>
+      <div class="ritem"><span class="rnum">3</span><strong>Voice Over Ad 4</strong> (CPL ₹475, 2 leads) → ↑25% budget</div>
+      <div class="ritem"><span class="rnum">4</span><strong>Creatives 1 Copy - Anna Nagar</strong> (CPL ₹499, 3 leads) → ↑20%</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card" style="border-left:4px solid #f59e0b">
+      <h3 style="color:#fbbf24">🟡 LAUNCH — New Arcadia Aerocity Campaign</h3>
+      <div class="ritem"><span class="rnum">1</span>Create new campaign: "Arcadia Aerocity P2 — Lead Gen — Adv+"</div>
+      <div class="ritem"><span class="rnum">2</span>Set CBO at ₹6,000/day with Cost Cap ₹350/lead</div>
+      <div class="ritem"><span class="rnum">3</span>Create 5 adsets (see Campaign Plan tab for full targeting)</div>
+      <div class="ritem"><span class="rnum">4</span>Upload 5 video scripts + create 3 variants per adset (15 ads total)</div>
+      <div class="ritem"><span class="rnum">5</span>Set up Instant Form + WhatsApp (see Lead Form tab)</div>
+      <div class="ritem"><span class="rnum">6</span>Install Meta Pixel on arcadiaaerocity.propshell.com</div>
+      <div class="ritem"><span class="rnum">7</span>DO NOT TOUCH for 3 days after launch — let Meta learn</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #3b82f6">
+      <h3 style="color:#60a5fa">📊 TRACK — Lead Quality Setup</h3>
+      <div class="ritem"><span class="rnum">1</span>Share the Lead Quality Excel template with your sales team</div>
+      <div class="ritem"><span class="rnum">2</span>Sales team fills: Lead Name, Phone, Campaign, Call Status, Quality (Hot/Warm/Cold/Junk)</div>
+      <div class="ritem"><span class="rnum">3</span>Upload completed Excel to me daily for cross-analysis</div>
+      <div class="ritem"><span class="rnum">4</span>Key question after Week 1: Which adset sends the BEST quality leads?</div>
+      <div class="ritem"><span class="rnum">5</span>By Week 2: shift 60% budget to best-quality adset</div>
+    </div>
+  </div>
+
+  <div class="stitle">Week 1 Calendar (After Launch)</div>
+  <div class="px">
+    <div class="tl">
+      <div class="tl-item"><h4>Day 1-2: Launch Day</h4><p>Campaign goes live. All 5 adsets, 15 ads active. DO NOT TOUCH. Let Meta's learning phase run.</p></div>
+      <div class="tl-item"><h4>Day 3: First Health Check</h4><p>Check delivery — are all 5 adsets spending? If any has ₹0 spend, check targeting overlap or bid cap.</p></div>
+      <div class="tl-item"><h4>Day 4: First Pause Decision</h4><p>Any ad with ₹1,000+ spend and 0 leads → PAUSE. Any ad with CPL < ₹300 → note as potential winner.</p></div>
+      <div class="tl-item"><h4>Day 5: A/B Test Check</h4><p>Compare Variant A vs B vs C in each adset. Kill the worst performer. Keep top 2 running.</p></div>
+      <div class="tl-item"><h4>Day 6: Lead Quality Sync</h4><p>First real quality check with sales team. Are Adset 2 (Kanchipuram) leads better than Adset 1 (Chennai)?</p></div>
+      <div class="tl-item done"><h4>Day 7: Full Week 1 Review</h4><p>Complete performance analysis. Identify top 2 adsets, top 3 ads. Prepare scaling plan for Week 2. Upload lead quality data.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Arcadia Aerocity — Propshell | Campaign Command Center | Data: Windsor.ai<br>
+  Performance Marketing Intelligence | Auto-updated daily at 9 AM | March 2026
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+}
+
+// Charts
+const chartOpts = (yLabel, prefix='', suffix='') => ({
+  responsive: true,
+  plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+  scales: {
+    y: { ticks: { color: '#64748b', callback: v => prefix + v.toLocaleString() + suffix }, grid: { color: '#1e293b' } },
+    x: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } }
+  }
+});
+
+const labels = ['Mar 19', 'Mar 20', 'Mar 21', 'Mar 22', 'Mar 23', 'Mar 24', 'Mar 25'];
+
+new Chart(document.getElementById('dailyChart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      { label: 'Spend (₹)', data: [4847,4520,4600,6121,5486,4734,5074], backgroundColor: 'rgba(59,130,246,0.6)', borderRadius: 4, yAxisID: 'y' },
+      { label: 'Leads', data: [4,4,7,6,3,7,5], type: 'line', borderColor: '#22c55e', pointRadius: 5, pointBackgroundColor: '#22c55e', borderWidth: 3, yAxisID: 'y1', tension: 0.3 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+    scales: {
+      y: { position: 'left', ticks: { color: '#64748b', callback: v => '₹' + v.toLocaleString() }, grid: { color: '#1e293b' } },
+      y1: { position: 'right', ticks: { color: '#22c55e', stepSize: 2 }, grid: { display: false } },
+      x: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: { labels: ['Andromeda (24)', 'Campaign 12 (12)'], datasets: [{ data: [24,12], backgroundColor: ['#22c55e','#ef4444'], borderWidth: 0 }] },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 15 } } }, cutout: '65%' }
+});
+
+new Chart(document.getElementById('cplChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      { label: 'CPL (₹)', data: [1212,1130,657,1020,1829,676,1015], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.3, pointRadius: 5 },
+      { label: 'Target ₹350', data: [350,350,350,350,350,350,350], borderColor: '#22c55e', borderDash: [8,4], borderWidth: 2, pointRadius: 0 }
+    ]
+  },
+  options: chartOpts('CPL', '₹')
+});
+
+new Chart(document.getElementById('ctrChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      { label: 'CTR %', data: [0.64,0.84,0.66,0.86,0.85,0.84,0.75], borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', fill: true, tension: 0.3, pointRadius: 5 },
+      { label: 'Target 1.5%', data: [1.5,1.5,1.5,1.5,1.5,1.5,1.5], borderColor: '#22c55e', borderDash: [8,4], borderWidth: 2, pointRadius: 0 }
+    ]
+  },
+  options: chartOpts('CTR', '', '%')
+});
+</script>
+</body>
+</html>
